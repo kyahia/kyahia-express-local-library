@@ -1,0 +1,38 @@
+extends layout
+
+block content
+   h1 #{title} : #{book.title}
+   
+   p #[strong Author:]
+      a(href=book.author.url) #{book.author.name}
+   p #[strong Summary:] #{book.summary}
+   p #[strong ISBN:] #{book.isbn}
+   p #[strong Genre:]
+      each val, index in book.genre
+         a(href=val.url) #{val.name}
+            if index < book.genre.length - 1
+               |,
+
+   if bookInstances.length
+
+      p Delete the following instances before attempting to delete the book.
+
+      .looped-list
+         h4 Instances
+
+         dl
+            each instance in bookInstances
+               dt #{instance.status}
+               dd
+                  a(href=instance.url) #{instance.imprint} 
+                  if instance.status!='Available'
+                     | Due back : #{instance.due_back}
+
+   else
+      p Do you really want to delete this Book ?
+
+      form(method='POST' action='')
+         input#bookid.form-control(type='hidden', name='bookid', value=book._id, required=true)
+         button.btn.btn-primary(type='submit') Delete
+
+   
